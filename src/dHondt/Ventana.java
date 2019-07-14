@@ -22,12 +22,16 @@ import com.jgoodies.forms.layout.RowSpec;
 
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import net.miginfocom.swing.MigLayout;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.SpringLayout;
 import java.awt.CardLayout;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -36,6 +40,11 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.ScrollPaneConstants;
 
 public class Ventana {
 
@@ -44,6 +53,7 @@ public class Ventana {
 	private JTable tabla;
 	private static int bancas;
 	private DefaultTableModel tableModel;
+	//private JScrollPane scrollPane;
 	
 	public static int getBancas() {
 		return bancas;
@@ -129,10 +139,13 @@ public class Ventana {
 		frame.getContentPane().add(lblBanderaProvincia);//agrego elementos jswing al panel
 		
 		JLabel lblBancas = new JLabel("BANCAS");
+		lblBancas.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBancas.setBounds(398, 11, 69, 14);
 		frame.getContentPane().add(lblBancas);
 		
 		JLabel lblTotal = new JLabel();
+		lblTotal.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTotal.setText(Integer.toString(bancas));
 		lblTotal.setBounds(398, 26, 69, 30);
 		frame.getContentPane().add(lblTotal);
 		
@@ -148,18 +161,28 @@ public class Ventana {
 		new Dhondt(candidatos);
 		
 		cargarTabla();
+		//frame.getContentPane().add(tabla);
+		JPanel panel = new JPanel();
+		panel.setBounds(20, 67, 445, 228);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
 		
 		tabla = new JTable(tableModel);
+		tabla.setSurrendersFocusOnKeystroke(true);
+		tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabla.setBounds(30, 67, 449, 244);
-		frame.getContentPane().add(tabla);
+		JScrollPane scrollPane = new JScrollPane(tabla);
+		scrollPane.setBounds(0, 0, 445, 228);
+		panel.add(scrollPane);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
 	}
 	
 	private void cargarTabla() {
-		tableModel = new DefaultTableModel(0,5);
 		Object[] objs;
-		// tableModel.addRow(columnas);//Agrego a la tabla
-
+		tableModel = new DefaultTableModel(new Object[] { "Partido","Votos","Escaños","%","Diferencia"},0);
+		//tableModel = new DefaultTableModel();
 		for (Candidato candidato : candidatos) {
 			objs = new Object[] { candidato.getPartido(), candidato.getVotos(), candidato.getEscaños()};
 			tableModel.addRow(objs);//Agrego a la tabla
