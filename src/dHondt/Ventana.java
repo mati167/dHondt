@@ -1,6 +1,7 @@
 package dHondt;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -18,6 +19,7 @@ import java.awt.Image;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
@@ -30,6 +32,8 @@ import java.awt.FlowLayout;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -37,13 +41,22 @@ public class Ventana {
 
 	JFrame frame;
 	private ArrayList <Candidato> candidatos= new ArrayList<Candidato>();
-	private JTable table;
+	private JTable tabla;
+	private static int bancas;
+	private DefaultTableModel tableModel;
+	
+	public static int getBancas() {
+		return bancas;
+	}
+	public static void setBancas(int renueva) {
+		bancas = renueva;
+	}
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Ventana window = new Ventana();
+					Ventana ventana = new Ventana();
 					//window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,18 +69,17 @@ public class Ventana {
 	}
 	private void initialize() {
 		new Cargar(candidatos);
-		JFrame frame = new JFrame ("prueba");
+		frame = new JFrame ("prueba");
 		frame.setSize(568,424);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+				
+
 		
-		table = new JTable();
-		table.setBounds(30, 67, 449, 244);
-		frame.getContentPane().add(table);
-		
-/************IMAGENES***********/	
-		//Image img = ImageIO.read(getClass().getResource("resources/refresh.png"));
+/****************************************************************************************************************************************************/		
+/*****************************************************************IMAGENES**************************************************************************/
+/**************************************************************************************************************************************************/	
 		
 		Image iconRefresh = new ImageIcon("resources/refresh.png").getImage().getScaledInstance(45, 45,//Nuevo icono de iumagen//Hago un resize de la imagen antes de agregarla
 		java.awt.Image.SCALE_SMOOTH);
@@ -83,8 +95,10 @@ public class Ventana {
 		
 		Image iconbsasFlag = new ImageIcon("resources/buenosairesbandera.png").getImage().getScaledInstance(66, 45,//Nuevo icono de iumagen//Hago un resize de la imagen antes de agregarla
 		java.awt.Image.SCALE_SMOOTH);
-		
-/************LABELS***********/
+
+/****************************************************************************************************************************************************/		
+/*****************************************************************LABELS****************************************************************************/
+/**************************************************************************************************************************************************/	
 		
 		JLabel lblTitulo = new JLabel("Elecciones Legislativas 2019");
 		lblTitulo.setBounds(89, 11, 299, 45);
@@ -118,7 +132,7 @@ public class Ventana {
 		lblBancas.setBounds(398, 11, 69, 14);
 		frame.getContentPane().add(lblBancas);
 		
-		JLabel lblTotal = new JLabel("");
+		JLabel lblTotal = new JLabel();
 		lblTotal.setBounds(398, 26, 69, 30);
 		frame.getContentPane().add(lblTotal);
 		
@@ -131,10 +145,25 @@ public class Ventana {
 		btnRefresh.setBounds(489, 93, 55, 45);
 		frame.getContentPane().add(btnRefresh);
 		
+		new Dhondt(candidatos);
 		
+		cargarTabla();
 		
-		
-		new Dhondt(35,candidatos);
+		tabla = new JTable(tableModel);
+		tabla.setBounds(30, 67, 449, 244);
+		frame.getContentPane().add(tabla);
 		
 	}
+	
+	private void cargarTabla() {
+		tableModel = new DefaultTableModel(0,5);
+		Object[] objs;
+		// tableModel.addRow(columnas);//Agrego a la tabla
+
+		for (Candidato candidato : candidatos) {
+			objs = new Object[] { candidato.getPartido(), candidato.getVotos(), candidato.getEscaños()};
+			tableModel.addRow(objs);//Agrego a la tabla
+		}
+	}
+	
 }

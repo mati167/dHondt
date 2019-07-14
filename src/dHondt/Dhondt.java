@@ -10,12 +10,10 @@ public class Dhondt {
 	private static final int VOTOS = 0;
 	private static final int BANCAS = 1;
 	
-	public Dhondt (int bancas, ArrayList<Candidato> c) {
+	public Dhondt (ArrayList<Candidato> c) {
+		int bancas = Ventana.getBancas();
 		matriz = new double[bancas+2][c.size()];
 		cand = c;
-		System.out.println(cand.size());
-		System.out.println(matriz.length);
-		System.out.println(matriz[0].length);
 		AsignarBancas();
 		MostrarBancas();
 		
@@ -25,8 +23,7 @@ public class Dhondt {
 	public void AsignarBancas () {
 		for (int i = 0; i < cand.size(); i++) {
 			matriz[VOTOS][i] = cand.get(i).getVotos(); 
-			matriz[BANCAS][i] = cand.get(i).getBancas()+1;
-			System.out.println(matriz[VOTOS][i]);
+			matriz[BANCAS][i] = cand.get(i).getEscaños()+1;
 		}
 		
 		for (int i = 2; i < matriz.length; i++) {
@@ -40,13 +37,13 @@ public class Dhondt {
 			mayor=0;
 		}
 		for (int i = 0; i < cand.size(); i++) {
-			cand.get(i).setBancas((int)matriz[BANCAS][i]-1);
+			cand.get(i).setEscaños((int)matriz[BANCAS][i]-1);
 		}
 	}
 	
 	public void MostrarBancas() {
 		for(int i=0; i < cand.size(); i++) {
-			System.out.println(cand.get(i).getPartido() + "\t" + cand.get(i).getBancas());
+			System.out.println(cand.get(i).getPartido() + "\t" + cand.get(i).getEscaños());
 		}
 	}
 	 

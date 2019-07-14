@@ -16,7 +16,9 @@ public class Cargar {
 		candidatos.add(c2);
 		candidatos.add(c3);
 		candidatos.add(c4);
-		candidatos.add(c5);	
+		candidatos.add(c5);
+		Ventana.setBancas(35);
+		
 	}
 }
 

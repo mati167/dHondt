@@ -3,12 +3,12 @@ package dHondt;
 public class Candidato {
 	private String partido;
 	private long votos;
-	private int Bancas;
+	private int escaños;
 	
 	public Candidato(String p,long v) {
 		this.partido = p;
 		this.votos= v;
-		this.Bancas=0;
+		this.escaños=0;
 	}
 	
 	public String getPartido() {
@@ -23,11 +23,11 @@ public class Candidato {
 	public void setVotos(int votos) {
 		this.votos = votos;
 	}
-	public int getBancas() {
-		return Bancas;
+	public int getEscaños() {
+		return escaños;
 	}
-	public void setBancas(int bancas) {
-		Bancas = bancas;
+	public void setEscaños(int bancas) {
+		escaños = bancas;
 	}
 	
 }
