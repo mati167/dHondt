@@ -1,7 +1,9 @@
-package dhondt;
+package dHondt;
 
 public class Candidato {
 	private String partido;
+	private long votos;
+	private int Bancas;
 	
 	public Candidato(String p,long v) {
 		this.partido = p;
@@ -27,6 +29,5 @@ public class Candidato {
 	public void setBancas(int bancas) {
 		Bancas = bancas;
 	}
-	private long votos;
-	private int Bancas;
+	
 }
