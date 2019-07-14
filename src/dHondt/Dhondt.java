@@ -1,5 +1,6 @@
 package dHondt;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Dhondt {
@@ -7,11 +8,13 @@ public class Dhondt {
 	private ArrayList<Candidato> cand;
 	private double[][] matriz;
 	private int mayor = 0;
+	private int bancas;
 	private static final int VOTOS = 0;
 	private static final int BANCAS = 1;
+	private DecimalFormat df = new DecimalFormat("####0.00");
 	
 	public Dhondt (ArrayList<Candidato> c) {
-		int bancas = Ventana.getBancas();
+		bancas = Ventana.getBancas();
 		matriz = new double[bancas+2][c.size()];
 		cand = c;
 		AsignarBancas();
@@ -38,12 +41,13 @@ public class Dhondt {
 		}
 		for (int i = 0; i < cand.size(); i++) {
 			cand.get(i).setEscaños((int)matriz[BANCAS][i]-1);
+			cand.get(i).setPorcentaje(df.format((matriz[BANCAS][i]-1)*100/bancas));
 		}
 	}
 	
 	public void MostrarBancas() {
 		for(int i=0; i < cand.size(); i++) {
-			System.out.println(cand.get(i).getPartido() + "\t" + cand.get(i).getEscaños());
+			System.out.println(cand.get(i).getPartido() + "\t" + cand.get(i).getEscaños() + "\t" + (cand.get(i).getPorcentaje()));
 		}
 	}
 	 

@@ -1,59 +1,37 @@
 package dHondt;
 
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JButton;
-import javax.swing.JToolBar;
 
-import javax.swing.JTextArea;
 import javax.swing.JTable;
-import java.awt.GridLayout;
 import java.awt.Image;
 
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-
-import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import net.miginfocom.swing.MigLayout;
-
-import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
-import javax.swing.SpringLayout;
-import java.awt.CardLayout;
-import java.awt.Container;
-import java.awt.FlowLayout;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 import javax.swing.ScrollPaneConstants;
 
 public class Ventana {
+
 
 	JFrame frame;
 	private ArrayList <Candidato> candidatos= new ArrayList<Candidato>();
 	private JTable tabla;
 	private static int bancas;
 	private DefaultTableModel tableModel;
-	//private JScrollPane scrollPane;
+	private Carga carga;
 	
 	public static int getBancas() {
 		return bancas;
@@ -78,7 +56,7 @@ public class Ventana {
 		initialize();
 	}
 	private void initialize() {
-		new Cargar(candidatos);
+		carga = new Carga(candidatos);
 		frame = new JFrame ("prueba");
 		frame.setSize(568,424);
 		frame.setVisible(true);
@@ -153,6 +131,8 @@ public class Ventana {
 		btnRefresh.setIcon(new ImageIcon(iconRefresh));
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				carga.actualizar(candidatos);
+				new Dhondt(candidatos);
 			}
 		});
 		btnRefresh.setBounds(489, 93, 55, 45);
@@ -161,7 +141,20 @@ public class Ventana {
 		new Dhondt(candidatos);
 		
 		cargarTabla();
-		//frame.getContentPane().add(tabla);
+		alinearTabla();		
+		
+		
+	}
+	
+	private void cargarTabla() {
+		Object[] objs;
+		tableModel = new DefaultTableModel(new Object[] { "Partido","Votos","Escaños","%"},0);
+		for (Candidato candidato : candidatos) {
+			objs = new Object[] { candidato.getPartido(), candidato.getVotos(), candidato.getEscaños(),candidato.getPorcentaje()};
+			tableModel.addRow(objs);//Agrego a la tabla
+		}
+	}
+	private void alinearTabla() {
 		JPanel panel = new JPanel();
 		panel.setBounds(20, 67, 445, 228);
 		frame.getContentPane().add(panel);
@@ -170,23 +163,23 @@ public class Ventana {
 		tabla = new JTable(tableModel);
 		tabla.setSurrendersFocusOnKeystroke(true);
 		tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tabla.getColumnModel().getColumn(0).setPreferredWidth(230);
+		tabla.getColumnModel().getColumn(1).setPreferredWidth(75);
+		tabla.getColumnModel().getColumn(2).setPreferredWidth(70);
+		tabla.getColumnModel().getColumn(3).setPreferredWidth(69);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		tabla.getColumnModel().getColumn(1).setCellRenderer( centerRenderer );
+		tabla.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
+		tabla.getColumnModel().getColumn(3).setCellRenderer( centerRenderer );
 		tabla.setBounds(30, 67, 449, 244);
+		
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		scrollPane.setBounds(0, 0, 445, 228);
 		panel.add(scrollPane);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		
-	}
-	
-	private void cargarTabla() {
-		Object[] objs;
-		tableModel = new DefaultTableModel(new Object[] { "Partido","Votos","Escaños","%","Diferencia"},0);
-		//tableModel = new DefaultTableModel();
-		for (Candidato candidato : candidatos) {
-			objs = new Object[] { candidato.getPartido(), candidato.getVotos(), candidato.getEscaños()};
-			tableModel.addRow(objs);//Agrego a la tabla
-		}
 	}
 	
 }
