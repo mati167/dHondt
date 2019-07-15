@@ -32,6 +32,7 @@ public class Ventana {
 	private static int bancas;
 	private DefaultTableModel tableModel;
 	private Carga carga;
+	private ArrayList<Candidato> votos;
 	
 	public static int getBancas() {
 		return bancas;
@@ -92,7 +93,7 @@ public class Ventana {
 		lblTitulo.setBounds(89, 11, 299, 45);
 		frame.getContentPane().add(lblTitulo);
 		
-		JLabel lblProvincia = new JLabel("");
+		JLabel lblProvincia = new JLabel();
 		lblProvincia.setBounds(474, 219, 70, 70);
 		lblProvincia.setIcon(new ImageIcon(iconbsas));//seteo el icono segun imagen pasada//Nuevo icono de iumagen
 		frame.getContentPane().add(lblProvincia);//agrego elementos jswing al panel
@@ -101,17 +102,17 @@ public class Ventana {
 		lblNombreProvincia.setBounds(115, 322, 371, 52);
 		frame.getContentPane().add(lblNombreProvincia);
 		
-		JLabel lblEscudoProvincia = new JLabel("");
+		JLabel lblEscudoProvincia = new JLabel();
 		lblEscudoProvincia.setBounds(34, 322, 56, 52);
 		lblEscudoProvincia.setIcon(new ImageIcon(iconbsasEscudo));//seteo el icono segun imagen pasada//Nuevo icono de iumagen
 		frame.getContentPane().add(lblEscudoProvincia);//agrego elementos jswing al panel
 		
-		JLabel lblBanderaPais = new JLabel("");
+		JLabel lblBanderaPais = new JLabel();
 		lblBanderaPais.setBounds(10, 11, 80, 45);
 		lblBanderaPais.setIcon(new ImageIcon(iconArgentina));//seteo el icono segun imagen pasada//Nuevo icono de iumagen
 		frame.getContentPane().add(lblBanderaPais);//agrego elementos jswing al panel
 		
-		JLabel lblBanderaProvincia = new JLabel("");
+		JLabel lblBanderaProvincia = new JLabel();
 		lblBanderaProvincia.setBounds(477, 11, 66, 45);
 		lblBanderaProvincia.setIcon(new ImageIcon(iconbsasFlag));//seteo el icono segun imagen pasada//Nuevo icono de iumagen
 		frame.getContentPane().add(lblBanderaProvincia);//agrego elementos jswing al panel
@@ -127,7 +128,7 @@ public class Ventana {
 		lblTotal.setBounds(398, 26, 69, 30);
 		frame.getContentPane().add(lblTotal);
 		
-		JButton btnRefresh = new JButton("");
+		JButton btnRefresh = new JButton();
 		btnRefresh.setIcon(new ImageIcon(iconRefresh));
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -148,7 +149,18 @@ public class Ventana {
 	
 	private void cargarTabla() {
 		Object[] objs;
-		tableModel = new DefaultTableModel(new Object[] { "Partido","Votos","Escaños","%"},0);
+		tableModel = new DefaultTableModel(new Object[] { "Partido","Votos","Bancas","% Bancas"},0) {
+			
+			 /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			    public boolean isCellEditable(int row, int column) {
+			       //all cells false
+			       return false;
+		}};
 		for (Candidato candidato : candidatos) {
 			objs = new Object[] { candidato.getPartido(), candidato.getVotos(), candidato.getEscaños(),candidato.getPorcentaje()};
 			tableModel.addRow(objs);//Agrego a la tabla
@@ -181,5 +193,7 @@ public class Ventana {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 	}
+	
+	
 	
 }
